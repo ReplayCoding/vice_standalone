@@ -1,4 +1,5 @@
-GCC=g++
+CC=gcc -ggdb
+CXX=g++ -ggdb
 
 vice: Main.o  IceKey.o
 	$(CC) -o ../bin/$@ Main.o IceKey.o -lstdc++

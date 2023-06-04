@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
+#include <unistd.h>
 #include "osdir.h"
 #include "IceKey.H"
 
@@ -152,13 +153,13 @@ int main(int argc, char* argv[])
 			if( strstr(nFile.c_str(),sExt) != NULL ){
 				
 				if(DEncrypt(nFile.c_str()))
-					std::cout << "Handled file: " << nFile << " successfully." << std::endl;
+					std::cerr << "Handled file: " << nFile << " successfully." << std::endl;
 			}
 
 		}
 	}else{
 		if(DEncrypt(argv[i]))
-			std::cout << "Handled file: " << argv[i] << " successfully." << std::endl;
+			std::cerr << "Handled file: " << argv[i] << " successfully." << std::endl;
 	}
 	//End Red Comet code
 }
@@ -188,7 +189,7 @@ bool DEncrypt(const char* filename)
 	if (pBuff == NULL || pOutBuff == NULL)
 	{
 		fclose(pFile);
-		std::cout << "Could not allocate buffer" << std::endl;
+		std::cerr << "Could not allocate buffer" << std::endl;
                 return false;
 	}
 
@@ -227,28 +228,7 @@ bool DEncrypt(const char* filename)
 	//The end chunk doesn't get an encryption?  that sux...
 	memcpy( p2, p1, bytesLeft );
 
-	size_t outLength = strlen(filename) + MAX_EXTENSION + 1;
-	char *pOutPath = (char *)malloc(outLength);
-	strncpy(pOutPath,filename,outLength);
-
-	SetExtension(pOutPath, outLength, g_Extension);
-
-	pFile = fopen (pOutPath , "wb");
-	if(pFile == NULL)
-	{
-		fprintf( stderr, "Was not able to open output file for writing.\n" );
-		free(pBuff);
-		free(pOutBuff);
-		free(pOutPath);
-		return false;
-	}
-
-	fwrite (pOutBuff , 1 , lFileSize , pFile);
-	fclose (pFile);
-
-	free(pBuff);
-	free(pOutBuff);
-	free(pOutPath);
+	fwrite (pOutBuff, 1, lFileSize, stdout);
 
 	return true;
 }
