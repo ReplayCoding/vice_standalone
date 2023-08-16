@@ -48,7 +48,7 @@ void Usage( void )
 
 void Exit(const char *msg)
 {
-	fprintf( stderr, msg );
+	fprintf( stderr, "%s", msg );
 	exit( 1 );
 }
 
